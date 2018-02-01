@@ -13,4 +13,6 @@
     <dimen name="label_margin_right">16sp</dimen>
     <dimen name="quantity_margin_left">8dp</dimen>
     <dimen name="quantity_margin_right">8dp</dimen>
+    <dimen name="check_box_font_size">16sp</dimen>
+    <dimen name="check_box_padding_left">24dp</dimen>
 </resources>

@@ -23,7 +23,10 @@ public class MainActivity extends AppCompatActivity {
 
     //This value sets a low threshold for the quantity picker and it avoids a negative value
     // for the quantity of coffees
-    static final int QTY_START = 0;
+    private static final int QTY_START = 0;
+
+    //Price for a single coffee
+    private static  final int PRICE_FOR_SINGLE_COFFEE = 5;
 
     //Global value which stores the quantity of ordered coffees
     int quantity = QTY_START;
@@ -41,29 +44,83 @@ public class MainActivity extends AppCompatActivity {
      * This method is called when the order button is clicked.
      */
     public void submitOrder(View view) {
-        String messagePrice;
-        int price;
+        int price = calculatePrice();
 
-        if(quantity != 0){
+        displayMessage(createOrderSummary(price));
+    }
 
-            price = quantity * 5;
-            messagePrice = "Total: " + NumberFormat.getCurrencyInstance().format(price);
-            messagePrice = messagePrice + "\n Thank you!";
+    /**
+     * This method returns a summary message when an order is submitted
+     * @param price Price of all ordered coffees
+     * @return Return a formatted message
+     */
+    private String createOrderSummary(int price){
+        String message;
 
+        if(price<=0){
+            message = "Nothing to pay \nThank you!";
         } else {
-
-            messagePrice = "Nothing to pay \n Thank you!";
-
+            message = "Name : Kaptain Kunal";
+            message += "\nQuantity : " + quantity;
+            message += "\nTotal: " + NumberFormat.getCurrencyInstance().format(price);
+            message +="\nThank you!";
         }
 
+        return message;
+    }
 
-        displayMessage(messagePrice);
+    /**
+     * This methods calculates the total price for a quantity of ordered coffees
+     * @param quantity
+     * @return
+     */
+    private int calculatePrice(int quantity){
+
+        if(quantity<= 0){
+            return 0;
+        }
+
+        return PRICE_FOR_SINGLE_COFFEE * quantity;
+    }
+
+    /**
+     * This method returns the total price for the number of ordered coffees
+     * @param quantity Number of coffees
+     * @param price Price for a single coffee
+     * @return Return the total price of the coffees
+     */
+    private int calculatePrice(int quantity, int price){
+        int totalPrice;
+
+        if((quantity <= 0)||(price <= 0)){
+            return 0;
+        }
+
+        totalPrice = quantity * price;
+
+        return totalPrice;
+    }
+
+    /**
+     * Calculate the total price of all ordered coffees, assuming the unit price is PRICE_FOR_SINGLE_COFFEE
+     * @return Returns the total price (quantity * unit_price)
+     */
+    private int calculatePrice(){
+        int totalPrice;
+
+        if(this.quantity <= 0){
+            return 0;
+        }
+
+        totalPrice = this.quantity * PRICE_FOR_SINGLE_COFFEE;
+
+        return totalPrice;
     }
 
     /**
      * This method displays the given quantity value on the screen.
      */
-    private void display(int number) {
+    private void displayQuantity(int number) {
         TextView quantityTextView = (TextView) findViewById(R.id.quantity_text_view);
         quantityTextView.setText("" + number);
     }
@@ -73,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void increment(View view){
         quantity += 1;
-        display(quantity);
+        displayQuantity(quantity);
     }
 
     /**
@@ -84,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
         //This code checks if the value is not zero, before to update the global value quantity
         if(!(quantity == QTY_START)){
             quantity -= 1;
-            display(quantity);
+            displayQuantity(quantity);
         }
     }
 
@@ -103,20 +160,20 @@ public class MainActivity extends AppCompatActivity {
     private void resetPriceTextView(){
         int price;
         String priceMessage;
-        TextView priceTextView;
+        TextView orderSummaryTextView;
 
         price = quantity * 5;
-        priceTextView= findViewById(R.id.price_text_view);
+        orderSummaryTextView= findViewById(R.id.order_summary_text_view);
         priceMessage = price + NumberFormat.getCurrencyInstance().format(price);
 
-        priceTextView.setText(priceMessage);
+        orderSummaryTextView.setText(priceMessage);
     }
 
     /**
      * This method displays the given text on the screen.
      */
     private void displayMessage(String message) {
-        TextView priceTextView = findViewById(R.id.price_text_view);
-        priceTextView.setText(message);
+        TextView orderSummaryTextView = findViewById(R.id.order_summary_text_view);
+        orderSummaryTextView.setText(message);
     }
 }
